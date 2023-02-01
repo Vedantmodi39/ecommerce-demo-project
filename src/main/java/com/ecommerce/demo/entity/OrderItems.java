@@ -11,18 +11,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class CartItem {
+public class OrderItems {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int id;
 
-    private int quantity;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private LocalDateTime deletedAt;
+
     @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Product product ;
-
-
 }
