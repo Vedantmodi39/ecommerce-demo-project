@@ -1,9 +1,6 @@
 package com.ecommerce.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +17,13 @@ public class ProductCategory {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int id;
 
+    private String name;
+
+    private String desc;
+
     private LocalDateTime createdAt;
+
     private LocalDateTime modifiedAt;
+
     private LocalDateTime deletedAt;
 }
