@@ -19,7 +19,7 @@ public class ProductCategory {
 
     private String name;
 
-    private String desc;
+    private String description;
 
     private LocalDateTime createdAt;
 
