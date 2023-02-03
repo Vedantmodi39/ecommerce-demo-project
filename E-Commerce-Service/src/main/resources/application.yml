@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: Ecommerce-SERVICE
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/ecommerceDB"
+    username: postgres
+    password: Simform@123
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8081/
+
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
