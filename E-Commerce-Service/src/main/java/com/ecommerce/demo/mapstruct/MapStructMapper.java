@@ -13,4 +13,6 @@ public interface MapStructMapper {
     Product productDtoToProduct(ProductDto productDto);
 
     ProductInventory ProductInventoryDtoToProductInventory(ProductInventoryDto productInventoryDto);
+
+
 }
