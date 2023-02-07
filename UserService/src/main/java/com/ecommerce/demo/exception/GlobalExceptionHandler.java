@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-
+    @ExceptionHandler(value = UserAlreadyExistException.class)
+    public ResponseEntity<Object> exception(UserAlreadyExistException exception) {
+        log.error("handling UserAlreadyExistException...");
+        return new ResponseEntity<>(new GenericResponse(false, "User Already Register " + exception.getMessage() , new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
 
 
 }

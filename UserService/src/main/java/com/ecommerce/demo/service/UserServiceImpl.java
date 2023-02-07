@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,24 +33,16 @@ public class UserServiceImpl implements UserService {
         Optional<Users> user = userRepository.findByEmail(userAddressPaymentDto.getUserDto().getEmail());
 
         if(user.isPresent()){
-            throw new UserAlreadyExistException("User Already Exists !");
+            throw new UserAlreadyExistException(userAddressPaymentDto.getUserDto().getEmail()+"");
         }else {
 
             Users users = mapStructMapper.userDtoToUser(userAddressPaymentDto.getUserDto());
-            ArrayList<UserPayment> userPaymentArrayList = new ArrayList<>();
-
-            for(int i = 0; i >=  userAddressPaymentDto.getUserPaymentDto().size() ; i++) {
-//                userPaymentArrayList.add(userAddressPaymentDto.getUserPaymentDto())
-                users.setUserPayments(userPaymentArrayList);
-            }
+            users.setUserPayments(userAddressPaymentDto.getUserPaymentDto().stream().map(mapStructMapper::userPaymentDtoToUserPayment).collect(Collectors.toList()));
             users.setCreatedAt(LocalDateTime.now());
             users.setModifiedAt(LocalDateTime.now());
 
-//            users.setUserAddresses(userDto.getUserAddresses());
-//            users.setUserPayments(userDto.getUserPayments());
-//            users.setCartItems(userDto.getCartItems());
             userRepository.save(users);
-            return user;
+            return new UserAddressPaymentDto(userAddressPaymentDto.getUserDto(),userAddressPaymentDto.getUserAddressDto(),userAddressPaymentDto.getUserPaymentDto());
         }
     }
 
