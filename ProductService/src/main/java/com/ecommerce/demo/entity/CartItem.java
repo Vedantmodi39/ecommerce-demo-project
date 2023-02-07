@@ -22,7 +22,6 @@ public class CartItem {
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;
     @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
-    private Product product ;
-
+    private Product product;
 
 }
