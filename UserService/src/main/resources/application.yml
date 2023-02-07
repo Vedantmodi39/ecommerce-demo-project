@@ -1,6 +1,6 @@
 spring:
   application:
-    name: Ecommerce-SERVICE
+    name: user-service
   jpa:
     hibernate:
       ddl-auto: update
