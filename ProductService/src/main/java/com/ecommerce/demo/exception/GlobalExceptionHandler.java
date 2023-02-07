@@ -23,4 +23,10 @@ public class GlobalExceptionHandler {
         log.error("handling CategoryNotExistException...");
         return new ResponseEntity<>(new GenericResponse(false,  exception.getMessage() + " Category Not Exist", new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(value = ProductIdNotFoundException.class)
+    public ResponseEntity<Object> exception(ProductIdNotFoundException exception) {
+        log.error("handling ProductIdNotFoundException...");
+        return new ResponseEntity<>(new GenericResponse(false, "Product Id "+exception.getMessage() +"Is Not Exist" , new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
 }

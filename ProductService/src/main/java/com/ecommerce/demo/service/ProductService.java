@@ -1,5 +1,7 @@
 package com.ecommerce.demo.service;
 
+import com.ecommerce.demo.dto.ProductCategoryDto;
+import com.ecommerce.demo.dto.ProductDto;
 import com.ecommerce.demo.dto.ProductDtoWithCategoryAndInventory;
 import com.ecommerce.demo.dto.ProductInventoryDto;
 import com.ecommerce.demo.entity.Product;
@@ -7,10 +9,12 @@ import com.ecommerce.demo.entity.ProductCategory;
 import com.ecommerce.demo.entity.ProductInventory;
 import com.ecommerce.demo.exception.CategoryNotExistException;
 import com.ecommerce.demo.exception.ProductAlreadyExistException;
+import com.ecommerce.demo.exception.ProductIdNotFoundException;
 import com.ecommerce.demo.mapstruct.MapStructMapper;
 import com.ecommerce.demo.repository.ProductCategoryRepository;
 import com.ecommerce.demo.repository.ProductRepository;
 import com.ecommerce.demo.utility.RecordCreationUtility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ProductService {
 
     public ProductService(ProductCategoryRepository productCategoryRepository, RecordCreationUtility recordCreationUtility, MapStructMapper mapStructMapper, ProductRepository productRepository) {
@@ -37,6 +42,7 @@ public class ProductService {
 
 
     public Object addProduct(ProductDtoWithCategoryAndInventory productDtoWithCategoryAndInventory) {
+
 
         Optional<Product> product1 = productRepository.findBySku(productDtoWithCategoryAndInventory.getProductDto().getSku());
         if (product1.isPresent()) {
@@ -67,6 +73,18 @@ public class ProductService {
     }
 
     public ProductDtoWithCategoryAndInventory getProduct(int productId) {
-        return null;
+        Optional<Product> product =productRepository.findById(productId);
+        if(product.isPresent())
+        {
+            ProductDto productDto=mapStructMapper.ProductToProductDto(product.get());
+            ProductInventoryDto productInventoryDto=mapStructMapper.ProductInventoryToProductInventoryDto(product.get().getProductInventory());
+            ProductCategoryDto productCategoryDto=mapStructMapper.ProductCategoryToProductCategoryDto(product.get().getProductCategory());
+           return new ProductDtoWithCategoryAndInventory(productDto,productCategoryDto,productInventoryDto);
+        }
+        else
+        {
+            throw new ProductIdNotFoundException(productId+" ");
+        }
+
     }
 }
