@@ -15,4 +15,6 @@ public interface MapStructMapper {
 
     Users userPaymentAddressDtoToUser(UserAddressPaymentDto userAddressPaymentDto);
 
+
+    Users userDtoToUser(UserDto userDto);
 }

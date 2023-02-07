@@ -1,6 +1,8 @@
 package com.ecommerce.demo.service;
 
 import com.ecommerce.demo.dto.UserAddressPaymentDto;
+import com.ecommerce.demo.dto.UserPaymentDto;
+import com.ecommerce.demo.entity.UserPayment;
 import com.ecommerce.demo.entity.Users;
 import com.ecommerce.demo.exception.UserAlreadyExistException;
 import com.ecommerce.demo.exception.UserNotFoundException;
@@ -9,6 +11,7 @@ import com.ecommerce.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -31,9 +34,16 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyExistException("User Already Exists !");
         }else {
 
-            Users users = mapStructMapper.userPaymentAddressDtoToUser(userAddressPaymentDto);
+            Users users = mapStructMapper.userDtoToUser(userAddressPaymentDto.getUserDto());
+            ArrayList<UserPayment> userPaymentArrayList = new ArrayList<>();
+
+            for(int i = 0; i >=  userAddressPaymentDto.getUserPaymentDto().size() ; i++) {
+//                userPaymentArrayList.add(userAddressPaymentDto.getUserPaymentDto())
+                users.setUserPayments(userPaymentArrayList);
+            }
             users.setCreatedAt(LocalDateTime.now());
             users.setModifiedAt(LocalDateTime.now());
+
 //            users.setUserAddresses(userDto.getUserAddresses());
 //            users.setUserPayments(userDto.getUserPayments());
 //            users.setCartItems(userDto.getCartItems());
