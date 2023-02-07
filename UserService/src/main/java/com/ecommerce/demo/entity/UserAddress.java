@@ -21,7 +21,7 @@ public class UserAddress {
     private String address;
     private String city;
     private String state;
-    private String county;
+    private String country;
     private String zipCode;
     private String mobileNo;
 }

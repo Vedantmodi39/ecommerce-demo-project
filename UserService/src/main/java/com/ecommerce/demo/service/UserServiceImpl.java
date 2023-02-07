@@ -1,7 +1,10 @@
 package com.ecommerce.demo.service;
 
+import com.ecommerce.demo.dto.UserAddressDto;
 import com.ecommerce.demo.dto.UserAddressPaymentDto;
+import com.ecommerce.demo.dto.UserDto;
 import com.ecommerce.demo.dto.UserPaymentDto;
+import com.ecommerce.demo.entity.UserAddress;
 import com.ecommerce.demo.entity.UserPayment;
 import com.ecommerce.demo.entity.Users;
 import com.ecommerce.demo.exception.UserAlreadyExistException;
@@ -38,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
             Users users = mapStructMapper.userDtoToUser(userAddressPaymentDto.getUserDto());
             users.setUserPayments(userAddressPaymentDto.getUserPaymentDto().stream().map(mapStructMapper::userPaymentDtoToUserPayment).collect(Collectors.toList()));
+            users.setUserAddresses(userAddressPaymentDto.getUserAddressDto().stream().map(mapStructMapper::userAddressDtoToUserAddress).collect(Collectors.toList()));
             users.setCreatedAt(LocalDateTime.now());
             users.setModifiedAt(LocalDateTime.now());
 
@@ -47,12 +51,27 @@ public class UserServiceImpl implements UserService {
     }
 
     public Object getUser(int userId){
-        Optional<Users> user1 = userRepository.findById(userId);
-        if(user1.isEmpty()){
+        Optional<Users> savedUser = userRepository.findById(userId);
+        if(savedUser.isPresent()){
+            UserDto userDto = mapStructMapper.UserToUserDto(savedUser.get());
+            List<UserAddressDto> userAddressDtoList = new ArrayList<>();
+            for(UserAddress userAddress : savedUser.get().getUserAddresses()){
+             UserAddressDto userAddressDto=mapStructMapper.UserAddressToUserAddressDto(userAddress);
+             userAddressDtoList.add(userAddressDto);
+            }
+            List<UserPaymentDto> userPaymentList = new ArrayList<>();
+            for(UserPayment userPayment : savedUser.get().getUserPayments()){
+                UserPaymentDto userPaymentDto=mapStructMapper.UserPaymentToUserPaymentDto(userPayment);
+                userPaymentList.add(userPaymentDto);
+            }
+
+//            UserPayment userPaymentDto = mapStructMapper.UserPaymentToUserPaymentDto(savedUser.get().getUserPayments());
+
+            return new UserAddressPaymentDto(userDto,userAddressDtoList,userPaymentList);
+        }
+        else {
             throw new UserNotFoundException("User Not Found !!");
         }
-        else
-            return user1;
     }
 
     public Object deleteUser(int userId){
