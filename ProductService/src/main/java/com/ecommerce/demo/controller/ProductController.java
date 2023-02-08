@@ -42,5 +42,14 @@ public class ProductController {
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 
+    @PutMapping("/updateProduct/{id}")
+    public ResponseEntity<GenericResponse> updateProduct(@RequestBody ProductDtoWithCategoryAndInventory productDtoWithCategoryAndInventory,@PathVariable(name = "id") int  productId)
+    {
+        log.info("Updating ProductDetails for {} ...", productId);
+        GenericResponse genericResponse=new GenericResponse(true,"Product updated Successfully",productService.updateProduct(productDtoWithCategoryAndInventory,productId),HttpStatus.OK.value());
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
+    }
+
+
 
 }

@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 public class ProductInventoryDto {
 
     private int quantity;
-
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

@@ -8,6 +8,7 @@ import com.ecommerce.demo.entity.Product;
 import com.ecommerce.demo.entity.ProductCategory;
 import com.ecommerce.demo.entity.ProductInventory;
 import com.ecommerce.demo.exception.CategoryNotExistException;
+import com.ecommerce.demo.exception.InvalidDataException;
 import com.ecommerce.demo.exception.ProductAlreadyExistException;
 import com.ecommerce.demo.exception.ProductIdNotFoundException;
 import com.ecommerce.demo.mapstruct.MapStructMapper;
@@ -86,5 +87,29 @@ public class ProductService {
             throw new ProductIdNotFoundException(productId+" ");
         }
 
+    }
+
+    public ProductDtoWithCategoryAndInventory updateProduct(ProductDtoWithCategoryAndInventory productDtoWithCategoryAndInventory, int productId) {
+        Optional<Product> product = productRepository.findById(productId);
+
+        if (product.isPresent()) {
+            if ((productDtoWithCategoryAndInventory.getProductInventoryDto().getQuantity() >= 0 )&& (productDtoWithCategoryAndInventory.getProductDto().getPrice()>0)) {
+                Optional<ProductCategory>  productCategory= productCategoryRepository.findByName(productDtoWithCategoryAndInventory.getProductCategoryDto().getName());
+                if(productCategory.isPresent()){
+                    Product newProduct = mapStructMapper.updateProductFromDto(productDtoWithCategoryAndInventory.getProductDto(), product.get());
+                    ProductInventory newproductInventory = mapStructMapper.updateProductInventoryFromDto(productDtoWithCategoryAndInventory.getProductInventoryDto(), product.get().getProductInventory());
+                    System.out.println(newProduct);
+                    newProduct.setProductInventory(newproductInventory);
+                    productRepository.save(newProduct);
+                }
+                else{
+                    throw new CategoryNotExistException(productDtoWithCategoryAndInventory.getProductCategoryDto().getName() + " ");
+                }
+            } else {
+                throw new InvalidDataException("Product Quantity must be Greater Than Or Equal To 0 AND Price must be Greater Than 0");
+            }
+        } else
+            throw new ProductIdNotFoundException(productId + " ");
+        return productDtoWithCategoryAndInventory;
     }
 }
