@@ -24,6 +24,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new GenericResponse(false,  exception.getMessage() + " Category Not Exist", new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = ProductDeletedException.class)
+    public ResponseEntity<Object> exception(ProductDeletedException exception) {
+        log.error("handling ProductDeletedException...");
+        return new ResponseEntity<>(new GenericResponse(false, "Product" +exception.getMessage() + "is Deleted", new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
     @ExceptionHandler(value = ProductIdNotFoundException.class)
     public ResponseEntity<Object> exception(ProductIdNotFoundException exception) {
         log.error("handling ProductIdNotFoundException...");

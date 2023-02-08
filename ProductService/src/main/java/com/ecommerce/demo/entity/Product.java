@@ -31,11 +31,9 @@ public class Product {
     private ProductInventory productInventory;
 
     private double price;
-
+    private boolean isDeleted;
     private LocalDateTime createdAt;
-
     private LocalDateTime modifiedAt;
-
     private LocalDateTime deletedAt;
 
 }

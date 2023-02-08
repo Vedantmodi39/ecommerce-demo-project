@@ -1,5 +1,6 @@
 package com.ecommerce.demo.controller;
 
+import com.ecommerce.demo.dto.EmptyJsonBody;
 import com.ecommerce.demo.dto.GenericResponse;
 import com.ecommerce.demo.dto.ProductDtoWithCategoryAndInventory;
 import com.ecommerce.demo.entity.Product;
@@ -47,6 +48,15 @@ public class ProductController {
     {
         log.info("Updating ProductDetails for {} ...", productId);
         GenericResponse genericResponse=new GenericResponse(true,"Product updated Successfully",productService.updateProduct(productDtoWithCategoryAndInventory,productId),HttpStatus.OK.value());
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/deleteProduct/{id}")
+    public ResponseEntity<GenericResponse> deleteProduct(@PathVariable(name = "id") int  productId)
+    {
+        log.info("Deleting ProductDetails for {} ...", productId);
+        productService.deleteProduct(productId);
+        GenericResponse genericResponse=new GenericResponse(true,"Product Deleted Successfully",new EmptyJsonBody(),HttpStatus.OK.value());
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 
