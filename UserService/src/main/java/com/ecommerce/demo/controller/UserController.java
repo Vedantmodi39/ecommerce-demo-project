@@ -2,6 +2,7 @@ package com.ecommerce.demo.controller;
 
 import com.ecommerce.demo.dto.GenericResponse;
 import com.ecommerce.demo.dto.UserAddressPaymentDto;
+import com.ecommerce.demo.dto.UserDto;
 import com.ecommerce.demo.service.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ public class UserController {
     private UserServiceImpl userService;
 
     @PostMapping("/addUser")
-    public ResponseEntity<GenericResponse> addUser(@RequestBody UserAddressPaymentDto userAddressPaymentDto)  {
-        log.info("Created New User with E-mail {}",userAddressPaymentDto.getUserDto().getEmail());
-        GenericResponse genericResponse = new GenericResponse(true ,"User Added Successfully." , userService.addUser(userAddressPaymentDto), HttpStatus.OK.value());
+    public ResponseEntity<GenericResponse> addUser(@RequestBody UserDto userDto)  {
+        log.info("Created New User with E-mail {}",userDto.getEmail());
+        GenericResponse genericResponse = new GenericResponse(true ,"User Added Successfully." , userService.addUser(userDto), HttpStatus.OK.value());
         return new ResponseEntity<>(genericResponse , HttpStatus.OK);
     }
 
@@ -35,6 +36,13 @@ public class UserController {
         log.info("Deleting User With User-Id {}",userId);
         GenericResponse genericResponse = new GenericResponse(true,"User Deleted Successfully" , userService.deleteUser(userId) , HttpStatus.OK.value());
         return  new ResponseEntity<>(genericResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateUser/{userId}")
+    public ResponseEntity<GenericResponse> updateUser(@PathVariable int userId , @RequestBody UserDto userDto){
+        log.info("Updating User with User-Id {}",userId);
+        GenericResponse genericResponse = new GenericResponse(true,"User Updated Successfully",userService.updateUser(userDto,userId),HttpStatus.OK.value());
+        return new ResponseEntity<>(genericResponse , HttpStatus.OK);
     }
 
 

@@ -32,42 +32,42 @@ public class UserServiceImpl implements UserService {
         this.mapStructMapper = mapStructMapper;
     }
 
-    public Object addUser(UserAddressPaymentDto userAddressPaymentDto)  {
-        Optional<Users> user = userRepository.findByEmail(userAddressPaymentDto.getUserDto().getEmail());
+    public Object addUser(UserDto userDto)  {
+        Optional<Users> user = userRepository.findByEmail(userDto.getEmail());
 
         if(user.isPresent()){
-            throw new UserAlreadyExistException(userAddressPaymentDto.getUserDto().getEmail()+"");
+            throw new UserAlreadyExistException(userDto.getEmail()+"");
         }else {
 
-            Users users = mapStructMapper.userDtoToUser(userAddressPaymentDto.getUserDto());
-            users.setUserPayments(userAddressPaymentDto.getUserPaymentDto().stream().map(mapStructMapper::userPaymentDtoToUserPayment).collect(Collectors.toList()));
-            users.setUserAddresses(userAddressPaymentDto.getUserAddressDto().stream().map(mapStructMapper::userAddressDtoToUserAddress).collect(Collectors.toList()));
+            Users users = mapStructMapper.userDtoToUser(userDto);
+//            users.setUserPayments(userAddressPaymentDto.getUserPaymentDto().stream().map(mapStructMapper::userPaymentDtoToUserPayment).collect(Collectors.toList()));
+//            users.setUserAddresses(userAddressPaymentDto.getUserAddressDto().stream().map(mapStructMapper::userAddressDtoToUserAddress).collect(Collectors.toList()));
             users.setCreatedAt(LocalDateTime.now());
             users.setModifiedAt(LocalDateTime.now());
 
             userRepository.save(users);
-            return new UserAddressPaymentDto(userAddressPaymentDto.getUserDto(),userAddressPaymentDto.getUserAddressDto(),userAddressPaymentDto.getUserPaymentDto());
+            return userDto;
         }
     }
 
-    public Object getUser(int userId){
+    public UserDto getUser(int userId){
         Optional<Users> savedUser = userRepository.findById(userId);
         if(savedUser.isPresent()){
             UserDto userDto = mapStructMapper.UserToUserDto(savedUser.get());
-            List<UserAddressDto> userAddressDtoList = new ArrayList<>();
-            for(UserAddress userAddress : savedUser.get().getUserAddresses()){
-             UserAddressDto userAddressDto=mapStructMapper.UserAddressToUserAddressDto(userAddress);
-             userAddressDtoList.add(userAddressDto);
-            }
-            List<UserPaymentDto> userPaymentList = new ArrayList<>();
-            for(UserPayment userPayment : savedUser.get().getUserPayments()){
-                UserPaymentDto userPaymentDto=mapStructMapper.UserPaymentToUserPaymentDto(userPayment);
-                userPaymentList.add(userPaymentDto);
-            }
+//            List<UserAddressDto> userAddressDtoList = new ArrayList<>();
+//            for(UserAddress userAddress : savedUser.get().getUserAddresses()){
+//             UserAddressDto userAddressDto=mapStructMapper.UserAddressToUserAddressDto(userAddress);
+//             userAddressDtoList.add(userAddressDto);
+//            }
+//            List<UserPaymentDto> userPaymentList = new ArrayList<>();
+//            for(UserPayment userPayment : savedUser.get().getUserPayments()){
+//                UserPaymentDto userPaymentDto=mapStructMapper.UserPaymentToUserPaymentDto(userPayment);
+//                userPaymentList.add(userPaymentDto);
+//            }
 
 //            UserPayment userPaymentDto = mapStructMapper.UserPaymentToUserPaymentDto(savedUser.get().getUserPayments());
 
-            return new UserAddressPaymentDto(userDto,userAddressDtoList,userPaymentList);
+            return userDto;
         }
         else {
             throw new UserNotFoundException("User Not Found !!");
@@ -81,5 +81,16 @@ public class UserServiceImpl implements UserService {
         }else
             userRepository.deleteById(userId);
         return "User Deleted";
+    }
+
+    public UserDto updateUser(UserDto userDto , int id){
+        Optional<Users> newUser = userRepository.findById(id);
+        if(newUser.isPresent()){
+            Users users = mapStructMapper.updateUserfromDto(userDto , newUser.get());
+            userRepository.save(users);
+            return userDto;
+        }else {
+            throw new UserNotFoundException("USer Not found with ID :"+userDto.getId());
+        }
     }
 }
