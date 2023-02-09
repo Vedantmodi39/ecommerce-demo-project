@@ -24,6 +24,7 @@ public class Users {
     private String lastName;
     private String phoneNo;
     private String email;
+    private boolean isDeleted;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

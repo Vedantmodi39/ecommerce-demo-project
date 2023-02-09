@@ -1,5 +1,6 @@
 package com.ecommerce.demo.controller;
 
+import com.ecommerce.demo.dto.EmptyJsonBody;
 import com.ecommerce.demo.dto.GenericResponse;
 import com.ecommerce.demo.dto.UserAddressPaymentDto;
 import com.ecommerce.demo.dto.UserDto;
@@ -41,7 +42,8 @@ public class UserController {
     @PutMapping("/updateUser/{userId}")
     public ResponseEntity<GenericResponse> updateUser(@PathVariable int userId , @RequestBody UserDto userDto){
         log.info("Updating User with User-Id {}",userId);
-        GenericResponse genericResponse = new GenericResponse(true,"User Updated Successfully",userService.updateUser(userDto,userId),HttpStatus.OK.value());
+        userService.updateUser(userDto,userId);
+        GenericResponse genericResponse = new GenericResponse(true,"User Updated Successfully",new EmptyJsonBody(),HttpStatus.OK.value());
         return new ResponseEntity<>(genericResponse , HttpStatus.OK);
     }
 

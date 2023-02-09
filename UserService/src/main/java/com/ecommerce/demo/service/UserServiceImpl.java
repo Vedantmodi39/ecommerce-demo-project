@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     public UserDto getUser(int userId){
         Optional<Users> savedUser = userRepository.findById(userId);
-        if(savedUser.isPresent()){
+        if(savedUser.isPresent() && !savedUser.get().isDeleted()){
             UserDto userDto = mapStructMapper.UserToUserDto(savedUser.get());
 //            List<UserAddressDto> userAddressDtoList = new ArrayList<>();
 //            for(UserAddress userAddress : savedUser.get().getUserAddresses()){
@@ -75,11 +75,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public Object deleteUser(int userId){
-        Optional<Users> user1 = userRepository.findById(userId);
-        if(user1.isEmpty()){
+        Optional<Users> user = userRepository.findById(userId);
+        if(user.isEmpty()){
             throw new UserNotFoundException("User Not Found !!");
         }else
-            userRepository.deleteById(userId);
+            user.get().setDeleted(true);
+        userRepository.save(user.get());
         return "User Deleted";
     }
 
@@ -90,7 +91,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(users);
             return userDto;
         }else {
-            throw new UserNotFoundException("USer Not found with ID :"+userDto.getId());
+            throw new UserNotFoundException("User Not found with ID :"+userDto.getId());
         }
     }
 }
