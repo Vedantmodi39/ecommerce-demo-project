@@ -1,23 +1,15 @@
 package com.ecommerce.demo.service;
 
-import com.ecommerce.demo.dto.UserAddressDto;
-import com.ecommerce.demo.dto.UserAddressPaymentDto;
 import com.ecommerce.demo.dto.UserDto;
-import com.ecommerce.demo.dto.UserPaymentDto;
-import com.ecommerce.demo.entity.UserAddress;
-import com.ecommerce.demo.entity.UserPayment;
 import com.ecommerce.demo.entity.Users;
 import com.ecommerce.demo.exception.UserAlreadyExistException;
 import com.ecommerce.demo.exception.UserNotFoundException;
 import com.ecommerce.demo.mapstruct.MapStructMapper;
 import com.ecommerce.demo.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,8 +32,7 @@ public class UserServiceImpl implements UserService {
         }else {
 
             Users users = mapStructMapper.userDtoToUser(userDto);
-//            users.setUserPayments(userAddressPaymentDto.getUserPaymentDto().stream().map(mapStructMapper::userPaymentDtoToUserPayment).collect(Collectors.toList()));
-//            users.setUserAddresses(userAddressPaymentDto.getUserAddressDto().stream().map(mapStructMapper::userAddressDtoToUserAddress).collect(Collectors.toList()));
+            users.setDeleted(false);
             users.setCreatedAt(LocalDateTime.now());
             users.setModifiedAt(LocalDateTime.now());
 
@@ -54,19 +45,6 @@ public class UserServiceImpl implements UserService {
         Optional<Users> savedUser = userRepository.findById(userId);
         if(savedUser.isPresent() && !savedUser.get().isDeleted()){
             UserDto userDto = mapStructMapper.UserToUserDto(savedUser.get());
-//            List<UserAddressDto> userAddressDtoList = new ArrayList<>();
-//            for(UserAddress userAddress : savedUser.get().getUserAddresses()){
-//             UserAddressDto userAddressDto=mapStructMapper.UserAddressToUserAddressDto(userAddress);
-//             userAddressDtoList.add(userAddressDto);
-//            }
-//            List<UserPaymentDto> userPaymentList = new ArrayList<>();
-//            for(UserPayment userPayment : savedUser.get().getUserPayments()){
-//                UserPaymentDto userPaymentDto=mapStructMapper.UserPaymentToUserPaymentDto(userPayment);
-//                userPaymentList.add(userPaymentDto);
-//            }
-
-//            UserPayment userPaymentDto = mapStructMapper.UserPaymentToUserPaymentDto(savedUser.get().getUserPayments());
-
             return userDto;
         }
         else {
@@ -80,14 +58,16 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User Not Found !!");
         }else
             user.get().setDeleted(true);
+            user.get().setModifiedAt(LocalDateTime.now());
         userRepository.save(user.get());
         return "User Deleted";
     }
 
     public UserDto updateUser(UserDto userDto , int id){
         Optional<Users> newUser = userRepository.findById(id);
-        if(newUser.isPresent()){
+        if(newUser.isPresent() && !newUser.get().isDeleted()){
             Users users = mapStructMapper.updateUserfromDto(userDto , newUser.get());
+            users.setModifiedAt(LocalDateTime.now());
             userRepository.save(users);
             return userDto;
         }else {
