@@ -112,7 +112,37 @@ public class ProductService {
 
     public void deleteProduct(int productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ProductIdNotFoundException(productId + ""));
+        product.setDeletedAt(LocalDateTime.now());
         product.setDeleted(true);
         productRepository.save(product);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,4 +15,7 @@ public class ProductInventoryDto {
     private int quantity;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
+    public ProductInventoryDto(int quantity, String s, String s1) {
+    }
 }
