@@ -22,5 +22,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new GenericResponse(false,"User Not Found ",new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    public ResponseEntity<Object> exception(IllegalArgumentException illegalArgumentException){
+        log.error("handling IllegalArgumentException...");
+        return new ResponseEntity<>(new GenericResponse(false,illegalArgumentException.getMessage(),new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
 
 }
