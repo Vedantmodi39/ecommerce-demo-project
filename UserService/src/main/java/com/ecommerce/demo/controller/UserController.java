@@ -1,5 +1,6 @@
 package com.ecommerce.demo.controller;
 
+import com.ecommerce.demo.dto.EmptyJsonBody;
 import com.ecommerce.demo.dto.GenericResponse;
 import com.ecommerce.demo.dto.UserDto;
 import com.ecommerce.demo.service.UserServiceImpl;
@@ -33,7 +34,7 @@ public class UserController {
     @DeleteMapping("/deleteUser/{userId}")
     public ResponseEntity<GenericResponse> removeUser(@PathVariable int userId){
         log.info("Deleting User With User-Id {}",userId);
-        GenericResponse genericResponse = new GenericResponse(true,"User Deleted Successfully" , userService.deleteUser(userId) , HttpStatus.OK.value());
+        GenericResponse genericResponse = new GenericResponse(true,"User Deleted Successfully" , new EmptyJsonBody(), HttpStatus.OK.value());
         return  new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 

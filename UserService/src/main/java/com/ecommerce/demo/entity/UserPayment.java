@@ -25,6 +25,7 @@ public class UserPayment {
     private String accountNo;
     private LocalDate expiry;
 
+    public UserPayment(int id, String paymentType, String provider, String accountNo, String expiry) {
 
-
+    }
 }

@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Object deleteUser(int userId){
+    public void deleteUser(int userId){
         Optional<Users> user = userRepository.findById(userId);
         if(user.isEmpty()){
             throw new UserNotFoundException("User Not Found !!");
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
             user.get().setDeleted(true);
             user.get().setModifiedAt(LocalDateTime.now());
         userRepository.save(user.get());
-        return "User Deleted";
+
     }
 
     public UserDto updateUser(UserDto userDto , int id){
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
             userRepository.save(users);
             return userDto;
         }else {
-            throw new UserNotFoundException("User Not found with ID :"+userDto.getId());
+            throw new UserNotFoundException("User Not found with ID :"+id);
         }
     }
 }
