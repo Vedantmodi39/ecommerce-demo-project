@@ -35,6 +35,7 @@ public class UserController {
     public ResponseEntity<GenericResponse> removeUser(@PathVariable int userId){
         log.info("Deleting User With User-Id {}",userId);
         GenericResponse genericResponse = new GenericResponse(true,"User Deleted Successfully" , new EmptyJsonBody(), HttpStatus.OK.value());
+        userService.deleteUser(userId);
         return  new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 

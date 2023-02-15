@@ -18,11 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
 import java.util.ArrayList;
 import java.util.List;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,9 +56,6 @@ public class UserControllerTest {
         userDto.setUserPaymentsList(paymentList);
     }
 
-
-
-
     @Test
     void getUser() throws Exception{
 
@@ -65,13 +65,14 @@ public class UserControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/user/getUser/"+1)
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(content().string(objectMapper.writeValueAsString(genericResponse)));
+                        .andExpect(content().string(objectMapper.writeValueAsString(genericResponse)))
+                        .andExpect(jsonPath("$", notNullValue()));
 
     }
     @Test
     void addUser() throws Exception{
 
-        GenericResponse genericResponse = new GenericResponse(true ,"User Added Successfully." ,userDto, HttpStatus.OK.value());
+//        GenericResponse genericResponse = new GenericResponse(true ,"User Added Successfully." ,userDto, HttpStatus.OK.value());
 
         String content = objectWriter.writeValueAsString(userDto);
 
@@ -92,7 +93,8 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/user/updateUser/1")
                 .content(content).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", notNullValue()));
 
     }
 
