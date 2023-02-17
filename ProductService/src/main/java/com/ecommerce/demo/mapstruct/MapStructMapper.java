@@ -7,6 +7,7 @@ import com.ecommerce.demo.dto.ProductInventoryDto;
 import com.ecommerce.demo.entity.Product;
 import com.ecommerce.demo.entity.ProductCategory;
 import com.ecommerce.demo.entity.ProductInventory;
+import dto.CategoryDto;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
@@ -29,4 +30,6 @@ public interface MapStructMapper {
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     ProductInventory updateProductInventoryFromDto(ProductInventoryDto productInventoryDto, @MappingTarget ProductInventory productInventory);
+
+    ProductCategory categoryDtoToProductCategory(CategoryDto categoryDto);
 }
