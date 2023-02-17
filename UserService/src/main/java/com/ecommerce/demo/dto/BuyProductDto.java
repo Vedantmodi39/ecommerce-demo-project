@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BuyProductDto {
-//    private UserPayment userPayment;
-//    private UserAddress userAddress;
-    private Set<CartItem> cartItemSet;
+   private UserPayment userPayment;
+   //private UserAddress userAddress;
+   private Set<CartItem> cartItemSet;
 }

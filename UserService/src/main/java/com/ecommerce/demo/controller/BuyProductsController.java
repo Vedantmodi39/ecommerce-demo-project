@@ -26,6 +26,7 @@ BuyProductService buyProductService;
 @PostMapping("/buyProducts/{id}")
 public ResponseEntity<GenericResponse> buyProducts(@PathVariable int id, @RequestBody BuyProductDto buyProductDto)
 {
+    log.info("Buy Product for {} ...", id);
     GenericResponse genericResponse = new GenericResponse(true, "Buy Product Successfully",buyProductService.buyProducts(id,buyProductDto), HttpStatus.OK.value());
     return new ResponseEntity<>(genericResponse, HttpStatus.OK);
 }

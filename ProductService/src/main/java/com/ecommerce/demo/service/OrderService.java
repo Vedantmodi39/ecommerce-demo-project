@@ -4,6 +4,7 @@ import com.ecommerce.demo.dto.CartItemDto;
 import com.ecommerce.demo.entity.CartItem;
 import com.ecommerce.demo.entity.Product;
 import com.ecommerce.demo.entity.Users;
+import com.ecommerce.demo.exception.ProductSkuNotFoundException;
 import com.ecommerce.demo.repository.CartItemRepository;
 import com.ecommerce.demo.repository.ProductRepository;
 import com.ecommerce.demo.repository.UserRepository;
@@ -18,25 +19,27 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class OrderService {
+public class    OrderService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
     public Set<CartItemDto> updateCart(Set<CartItemDto> cartItemDtos, int userId){
+
         Users user = userRepository.findById(userId).orElse(null);
         if(user == null)
             return null;
 
+
         List<CartItem> cartItemList = user.getCartItems();
         Set<Product> productSet = cartItemList.stream().map(CartItem::getProduct).collect(Collectors.toSet());
+
 
         List<CartItem> cartItemListNew = new ArrayList<>();
 
         for(CartItemDto cartItemDto : cartItemDtos){
-            Product product =  productRepository.findBySku(cartItemDto.getProductSku()).orElse(null);
-            if(product == null)
-                continue;
+            Product product =  productRepository.findBySku(cartItemDto.getProductSku()).orElseThrow(() -> new ProductSkuNotFoundException(cartItemDto.getProductSku()+""));
+
             CartItem cartItem;
             if(productSet.contains(product)){
                 cartItem = cartItemRepository.findByUserAndProduct(user.getUsername(), cartItemDto.getProductSku());
@@ -45,6 +48,7 @@ public class OrderService {
                 if(cartItemDto.getQuantity() == 0)
                     cartItem.setDeletedAt(LocalDateTime.now());
                 else
+
                     cartItem.setDeletedAt(null);
             }else{
                 cartItem = new CartItem();
@@ -54,6 +58,7 @@ public class OrderService {
             cartItem.setProduct(product);
             cartItemListNew.add(cartItem);
         }
+        cartItemListNew.addAll(cartItemList);
         user.setCartItems(cartItemListNew);
         userRepository.save(user);
         return cartItemDtos;

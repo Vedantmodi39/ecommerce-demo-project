@@ -29,14 +29,14 @@ public class Users {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<UserAddress> userAddresses ;
 
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @JoinColumn(name = "user_idFk",referencedColumnName = "id")
     private List<UserPayment> userPayments ;
 
-    @OneToMany(targetEntity = CartItem.class,cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinColumn(name="user_id_fk",referencedColumnName = "id")
     private List<CartItem> cartItems ;
 }

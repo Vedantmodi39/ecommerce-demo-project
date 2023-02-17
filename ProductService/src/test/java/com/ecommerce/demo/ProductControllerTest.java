@@ -72,7 +72,7 @@ MockMvc mockMvc;
 
         String content=objectWriter.writeValueAsString(productDtoWithCategoryAndInventory);
 
-        Mockito.when(productService.addProduct(productDtoWithCategoryAndInventory)).thenReturn(productDtoWithCategoryAndInventory);
+        Mockito.when(productService.updateProduct(productDtoWithCategoryAndInventory,1)).thenReturn(productDtoWithCategoryAndInventory);
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/products/updateProduct/1")
                         .content(content)

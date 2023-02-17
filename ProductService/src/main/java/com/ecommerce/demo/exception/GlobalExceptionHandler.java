@@ -18,6 +18,12 @@ public class GlobalExceptionHandler {
         log.error("handling ProductAlreadyExistException...");
         return new ResponseEntity<>(new GenericResponse(false, "This "+exception.getMessage() +" SKU Number Already Exist " , new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(value = ProductSkuNotFoundException.class)
+    public ResponseEntity<Object> exception(ProductSkuNotFoundException exception) {
+        log.error("handling ProductSkuNotFoundException...");
+        return new ResponseEntity<>(new GenericResponse(false,  exception.getMessage() + " Product Not Exist", new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = CategoryNotExistException.class)
     public ResponseEntity<Object> exception(CategoryNotExistException exception) {
         log.error("handling CategoryNotExistException...");

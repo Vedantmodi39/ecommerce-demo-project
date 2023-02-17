@@ -22,6 +22,8 @@ public class CartItem {
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;
     @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @JoinColumn(name="product_id_fk",referencedColumnName = "id")
     private Product product;
+
 
 }
