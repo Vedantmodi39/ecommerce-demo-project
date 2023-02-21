@@ -53,6 +53,7 @@ public class    OrderService {
             }else{
                 cartItem = new CartItem();
                 cartItem.setCreatedAt(LocalDateTime.now());
+                cartItem.setTotalPrice(cartItemDto.getQuantity()* product.getPrice());
                 cartItem.setQuantity(cartItemDto.getQuantity());
             }
             cartItem.setProduct(product);

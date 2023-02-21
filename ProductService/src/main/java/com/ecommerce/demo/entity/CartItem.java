@@ -19,6 +19,7 @@ public class CartItem {
 
     private int quantity;
     private LocalDateTime createdAt;
+    private double totalPrice;
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;
     @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})

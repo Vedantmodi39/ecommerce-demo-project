@@ -17,6 +17,7 @@ public class CartItem {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private int id;
     private int quantity;
+    private int totalPrice;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private LocalDateTime deletedAt;

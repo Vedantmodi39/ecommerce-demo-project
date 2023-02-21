@@ -1,16 +1,18 @@
 package com.ecommerce.demo.service;
 
 import com.ecommerce.demo.dto.BuyProductDto;
+import com.ecommerce.demo.dto.MyOrdersDto;
 import com.ecommerce.demo.entity.*;
 import com.ecommerce.demo.exception.UserNotFoundException;
+import com.ecommerce.demo.mapstruct.MapStructMapper;
 import com.ecommerce.demo.repository.*;
-import jakarta.persistence.criteria.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BuyProductService {
@@ -22,6 +24,9 @@ public class BuyProductService {
     CartItemRepository cartItemRepository;
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+     MapStructMapper mapStructMapper;
     @Autowired
     UserPaymentRepository userPaymentRepository;
 
@@ -72,6 +77,8 @@ public class BuyProductService {
 
                         OrderItems orderItems = new OrderItems();
                         orderItems.setProduct(product);
+                        orderItems.setQuantity(cartItem3.getQuantity());
+                        orderItems.setPrice(cartItem3.getTotalPrice());
                         orderItemsList.add(orderItems);
 
                         productInventoryRepository.save(productInventory);
@@ -89,4 +96,26 @@ public class BuyProductService {
         return "Buy Products Successfully";
     }
 
+    public List<MyOrdersDto> getMyOrders(int id) {
+
+        Optional<Users> user = userRepository.findById(id);
+        List<MyOrdersDto> myOrdersDtoList = new ArrayList<>();
+        if (user.isPresent()) {
+
+            List<OrderItems> orderItemsList = orderDetailsRepository.findByUserId(id);
+
+            for (OrderItems orderItems : orderItemsList) {
+                MyOrdersDto myOrdersDto;
+                myOrdersDto = mapStructMapper.OrderItemsToMyOrdersDto(orderItems);
+                myOrdersDto.setName(orderItems.getProduct().getName());
+                myOrdersDto.setSku(orderItems.getProduct().getSku());
+                myOrdersDto.setDescription(orderItems.getProduct().getDescription());
+                myOrdersDtoList.add(myOrdersDto);
+            }
+        } else {
+            throw new UserNotFoundException("User Not Found");
+        }
+        return myOrdersDtoList;
+
+    }
 }

@@ -2,9 +2,12 @@ package com.ecommerce.demo.mapstruct;
 
 
 
+import com.ecommerce.demo.dto.MyOrdersDto;
 import com.ecommerce.demo.dto.UserDto;
 import com.ecommerce.demo.entity.*;
 import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface MapStructMapper {
@@ -21,4 +24,6 @@ public interface MapStructMapper {
     @Mapping(source = "userDto.userAddressesList" ,target = "userAddresses")
     @Mapping(source = "userDto.userPaymentsList" , target="userPayments")
     Users updateUserfromDto(UserDto userDto, @MappingTarget Users users);
+
+  MyOrdersDto OrderItemsToMyOrdersDto(OrderItems orderItems);
 }
