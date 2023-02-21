@@ -1,10 +1,13 @@
 package com.ecommerce.demo.service;
 
 import com.ecommerce.demo.dto.CartItemDto;
+import com.ecommerce.demo.dto.CartProductDto;
+import com.ecommerce.demo.dto.GetCartItemDto;
 import com.ecommerce.demo.entity.CartItem;
 import com.ecommerce.demo.entity.Product;
 import com.ecommerce.demo.entity.Users;
 import com.ecommerce.demo.exception.ProductSkuNotFoundException;
+import com.ecommerce.demo.exception.UserNotFoundException;
 import com.ecommerce.demo.repository.CartItemRepository;
 import com.ecommerce.demo.repository.ProductRepository;
 import com.ecommerce.demo.repository.UserRepository;
@@ -12,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,5 +64,17 @@ public class    OrderService {
         user.setCartItems(cartItemListNew);
         userRepository.save(user);
         return cartItemDtos;
+    }
+
+    public Set<GetCartItemDto> getCart(int userId) {
+        Optional<Users> user = userRepository.findById(userId);
+        if(user.isPresent()){
+            Set<GetCartItemDto> getCartItemDtos = new HashSet<>();
+
+            return  getCartItemDtos;
+        }
+        else{
+            throw new UserNotFoundException("User Not Found");
+        }
     }
 }
