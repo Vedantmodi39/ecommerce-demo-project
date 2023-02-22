@@ -26,7 +26,7 @@ public class OrderController {
     @GetMapping("/getCart/{userId}")
     public ResponseEntity<GenericResponse> updateCart(@PathVariable int userId)
     {
-        GenericResponse genericResponse = new GenericResponse(true, "Product Added to cart Successfully", orderService.getCart(userId), HttpStatus.OK.value());
+        GenericResponse genericResponse = new GenericResponse(true, "Fetching Cart Items", orderService.getCart(userId), HttpStatus.OK.value());
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
 
     }

@@ -69,9 +69,28 @@ public class    OrderService {
     public Set<GetCartItemDto> getCart(int userId) {
         Optional<Users> user = userRepository.findById(userId);
         if(user.isPresent()){
-            Set<GetCartItemDto> getCartItemDtos = new HashSet<>();
+            Set<GetCartItemDto> getCartItemDtoSet = new HashSet<>();
 
-            return  getCartItemDtos;
+            List<CartItem> cartItemList = user.get().getCartItems();
+
+            for(CartItem cartItem : cartItemList){
+                Product product = cartItem.getProduct();
+                GetCartItemDto getCartItemDto = new GetCartItemDto();
+                getCartItemDto.setQuantity(cartItem.getQuantity());
+                getCartItemDto.setTotalPrice(cartItem.getTotalPrice());
+
+                CartProductDto cartProductDto = new CartProductDto();
+                cartProductDto.setName(product.getName());
+                cartProductDto.setPrice(product.getPrice());
+                cartProductDto.setSku(product.getSku());
+                cartProductDto.setDescription(product.getDescription());
+                cartProductDto.setProductCategoryName(product.getProductCategory().getName());
+                getCartItemDto.setCartProductDto(cartProductDto);
+
+                getCartItemDtoSet.add(getCartItemDto);
+            }
+
+            return  getCartItemDtoSet;
         }
         else{
             throw new UserNotFoundException("User Not Found");

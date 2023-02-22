@@ -12,6 +12,5 @@ public class CartProductDto {
     private String description;
     private String sku;
     private double price;
-    @JsonIgnore
-    private int productCategoryId;
+    private String productCategoryName;
 }

@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetCartItemDto {
     private int quantity;
+    private double totalPrice;
     private CartProductDto cartProductDto;
 }

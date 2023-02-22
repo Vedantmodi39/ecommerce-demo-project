@@ -46,4 +46,9 @@ public class GlobalExceptionHandler {
         log.error("handling InvalidDataException...");
         return new ResponseEntity<>(new GenericResponse(false, exception.getMessage(), new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(value = CategoryAlreadyExistsException.class)
+    public ResponseEntity<Object> exception(CategoryAlreadyExistsException exception) {
+        log.error("handling CategoryAlredyExistsException...");
+        return new ResponseEntity<>(new GenericResponse(false, exception.getMessage(), new EmptyJsonBody(), HttpStatus.NOT_FOUND.value()), HttpStatus.NOT_FOUND);
+    }
 }
