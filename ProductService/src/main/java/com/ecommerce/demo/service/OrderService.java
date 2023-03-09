@@ -12,10 +12,18 @@ import com.ecommerce.demo.repository.CartItemRepository;
 import com.ecommerce.demo.repository.ProductRepository;
 import com.ecommerce.demo.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.requestreply.ReplyingKafkaTemplate;
+import org.springframework.kafka.requestreply.RequestReplyFuture;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +32,11 @@ public class    OrderService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    @Value("${spring.kafka.request.topic}")
+    private String requestTopic;
+
+    @Autowired
+    private ReplyingKafkaTemplate<String, Object, Users> replyingKafkaTemplate;
 
     public Set<CartItemDto> updateCart(Set<CartItemDto> cartItemDtos, int userId){
 
@@ -66,12 +79,18 @@ public class    OrderService {
         return cartItemDtos;
     }
 
-    public Set<GetCartItemDto> getCart(int userId) {
-        Optional<Users> user = userRepository.findById(userId);
-        if(user.isPresent()){
+    public Set<GetCartItemDto> getCart(int userId) throws InterruptedException, ExecutionException {
+
+        ProducerRecord<String, Object> record = new ProducerRecord<>(requestTopic, null, "user001", userId);
+        RequestReplyFuture<String, Object, Users> future = replyingKafkaTemplate.sendAndReceive(record);
+        ConsumerRecord<String, Users> response = future.get();
+
+        Users user = response.value();
+
+        if(user != null){
             Set<GetCartItemDto> getCartItemDtoSet = new HashSet<>();
 
-            List<CartItem> cartItemList = user.get().getCartItems();
+            List<CartItem> cartItemList = user.getCartItems();
 
             for(CartItem cartItem : cartItemList){
                 Product product = cartItem.getProduct();

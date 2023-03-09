@@ -1,14 +1,13 @@
 package com.ecommerce.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -29,14 +28,14 @@ public class Users {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
     private List<UserAddress> userAddresses ;
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
     @JoinColumn(name = "user_idFk",referencedColumnName = "id")
     private List<UserPayment> userPayments ;
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
     @JoinColumn(name="user_id_fk",referencedColumnName = "id")
     private List<CartItem> cartItems ;
 }
