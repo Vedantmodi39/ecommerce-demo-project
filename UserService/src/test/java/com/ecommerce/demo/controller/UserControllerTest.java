@@ -1,4 +1,4 @@
-package com.ecommerce.demo;
+package com.ecommerce.demo.controller;
 
 import com.ecommerce.demo.dto.EmptyJsonBody;
 import com.ecommerce.demo.dto.GenericResponse;

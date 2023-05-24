@@ -3,12 +3,6 @@ package com.ecommerce.demo.controller;
 import com.ecommerce.demo.dto.EmptyJsonBody;
 import com.ecommerce.demo.dto.GenericResponse;
 import com.ecommerce.demo.dto.ProductDtoWithCategoryAndInventory;
-import com.ecommerce.demo.entity.Product;
-import com.ecommerce.demo.entity.ProductCategory;
-import com.ecommerce.demo.exception.CategoryNotExistException;
-import com.ecommerce.demo.exception.ProductAlreadyExistException;
-import com.ecommerce.demo.repository.ProductCategoryRepository;
-import com.ecommerce.demo.repository.ProductRepository;
 import com.ecommerce.demo.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +52,14 @@ public class ProductController {
         productService.deleteProduct(productId);
         GenericResponse genericResponse=new GenericResponse(true,"Product Deleted Successfully",new EmptyJsonBody(),HttpStatus.OK.value());
         return new ResponseEntity<>(genericResponse, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<GenericResponse> search(String query){
+        log.info("Searching For Products {} ...",query);
+        productService.searchProducts(query);
+        GenericResponse genericResponse = new GenericResponse(true,"Product Found SuccessFully",productService.searchProducts(query),HttpStatus.OK.value());
+        return new ResponseEntity<>(genericResponse,HttpStatus.OK);
     }
 
 

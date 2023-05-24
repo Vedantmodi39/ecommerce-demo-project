@@ -34,7 +34,7 @@ public class Users {
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<UserPayment> userPayments ;
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name="user_id_fk",referencedColumnName = "id")
     private List<CartItem> cartItems ;
 }

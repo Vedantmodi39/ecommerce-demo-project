@@ -12,16 +12,18 @@ spring:
   kafka:
     request:
      topic: user_topic
+     topic2: user_save
     reply:
       topic: result
     group:
       id: user-result-group
+      id2: user-save-group
     producer:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-      enable-auto-commit: false
-      auto-offset-reset : earliest
+#      enable-auto-commit: false
+#      auto-offset-reset : earliest
       properties:
         spring:
           json:

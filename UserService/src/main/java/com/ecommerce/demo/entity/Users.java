@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Users {
 
     @Id
@@ -29,13 +30,14 @@ public class Users {
     private LocalDateTime modifiedAt;
 
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_idFk",referencedColumnName = "id")
     private List<UserAddress> userAddresses ;
 
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
     @JoinColumn(name = "user_idFk",referencedColumnName = "id")
     private List<UserPayment> userPayments ;
 
-    @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL},fetch = FetchType.EAGER)
     @JoinColumn(name="user_id_fk",referencedColumnName = "id")
     private List<CartItem> cartItems ;
 }

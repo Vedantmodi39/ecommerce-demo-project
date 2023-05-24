@@ -11,10 +11,10 @@ import com.ecommerce.demo.repository.ProductRepository;
 import com.ecommerce.demo.utility.RecordCreationUtility;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,7 +49,7 @@ public class ProductService {
                 Product product = mapStructMapper.productDtoToProduct(productDtoWithCategoryAndInventory.getProductDto());
                 product.setDeleted(false);
                 product.setProductCategory(productCategory.get());
-                BeanUtils.copyProperties(recordCreationUtility.putNewRecordInformation(), product);
+//                BeanUtils.copyProperties(recordCreationUtility.putNewRecordInformation(), product);
 
                 ProductInventoryDto productInventoryDto = new ProductInventoryDto();
                 //BeanUtils.copyProperties(recordCreationUtility.putNewRecordInformation(),productInventoryDto);
@@ -115,6 +115,11 @@ public class ProductService {
         product.setDeletedAt(LocalDateTime.now());
         product.setDeleted(true);
         productRepository.save(product);
+    }
+
+    public List<Product> searchProducts(String query){
+        List<Product> productList = productRepository.searchProducts(query);
+        return productList;
     }
 }
 

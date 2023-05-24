@@ -32,6 +32,9 @@ public class OrderDetails {
    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
    private UserPayment userPayments;
 
+    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    private UserAddress userAddress;
+
     @OneToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     @JoinColumn(name = "orderDetails_FK",referencedColumnName = "id")
     private List<OrderItems> orderItems;

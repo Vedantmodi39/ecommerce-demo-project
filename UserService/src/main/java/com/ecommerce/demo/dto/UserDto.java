@@ -4,12 +4,14 @@ import com.ecommerce.demo.entity.CartItem;
 import com.ecommerce.demo.entity.UserAddress;
 import com.ecommerce.demo.entity.UserPayment;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {

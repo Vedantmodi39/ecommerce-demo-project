@@ -19,7 +19,7 @@ public class OrderItems {
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private int price;
+    private double price;
     private int quantity;
     @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private Product product ;

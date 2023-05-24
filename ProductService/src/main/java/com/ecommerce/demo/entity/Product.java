@@ -2,6 +2,7 @@ package com.ecommerce.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class Product {
 
     @Id
@@ -27,7 +29,7 @@ public class Product {
     @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private ProductCategory productCategory ;
 
-    @OneToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+    @OneToOne(cascade = {CascadeType.REMOVE,CascadeType.PERSIST})
     private ProductInventory productInventory;
 
     private double price;
